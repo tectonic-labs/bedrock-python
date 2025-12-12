@@ -12,10 +12,7 @@ impl HhdWallet {
     #[staticmethod]
     #[pyo3(signature = (schemes, password=None))]
     pub fn new(schemes: Vec<PyRef<'_, SignatureScheme>>, password: Option<&str>) -> PyResult<Self> {
-        let schemes = schemes
-            .iter()
-            .map(|scheme| scheme.0.clone())
-            .collect::<Vec<_>>();
+        let schemes = schemes.iter().map(|scheme| scheme.0).collect::<Vec<_>>();
         bedrock::hhd::HHDWallet::new(schemes, password)
             .map(Self)
             .map_err(|e| PyValueError::new_err(e.to_string()))
@@ -30,10 +27,7 @@ impl HhdWallet {
     ) -> PyResult<Self> {
         let mnemonic = bedrock::hhd::Mnemonic::from_phrase(mnemonic)
             .map_err(|e| PyValueError::new_err(e.to_string()))?;
-        let schemes = schemes
-            .iter()
-            .map(|scheme| scheme.0.clone())
-            .collect::<Vec<_>>();
+        let schemes = schemes.iter().map(|scheme| scheme.0).collect::<Vec<_>>();
         bedrock::hhd::HHDWallet::new_from_mnemonic(mnemonic, schemes, password)
             .map(Self)
             .map_err(|e| PyValueError::new_err(e.to_string()))
@@ -46,7 +40,7 @@ impl HhdWallet {
     pub fn master_seeds<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyDict>> {
         let dict = PyDict::new_bound(py);
         for (scheme, seed) in self.0.master_seeds().iter() {
-            let key = SignatureScheme(scheme.clone()).into_py(py);
+            let key = SignatureScheme(*scheme).into_py(py);
             let value = seed.as_seed().as_bytes().to_vec().into_py(py);
             dict.set_item(key, value)?;
         }

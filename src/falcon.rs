@@ -13,6 +13,7 @@ pub const FALCON_ETHEREUM_STR: &str = "ETHFALCON";
 
 #[pyclass]
 #[repr(transparent)]
+#[derive(Default)]
 pub struct FalconScheme(bedrock::falcon::FalconScheme);
 
 #[pymethods]
@@ -107,7 +108,7 @@ impl FalconScheme {
     pub fn sign(&self, message: &[u8], keypair: &FalconKeyPair) -> PyResult<FalconSignature> {
         if let Some(sk) = &keypair.secret_key {
             sk.scheme()
-                .sign(message, &sk)
+                .sign(message, sk)
                 .map(FalconSignature)
                 .map_err(|e| PyValueError::new_err(e.to_string()))
         } else {

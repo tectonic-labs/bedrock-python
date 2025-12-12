@@ -13,6 +13,7 @@ pub const ML_DSA_87_STR: &str = "ML-DSA-87";
 
 #[pyclass]
 #[repr(transparent)]
+#[derive(Default)]
 pub struct MlDsaScheme(bedrock::ml_dsa::MlDsaScheme);
 
 #[pymethods]
@@ -107,7 +108,7 @@ impl MlDsaScheme {
     pub fn sign(&self, message: &[u8], keypair: &MlDsaKeyPair) -> PyResult<MlDsaSignature> {
         if let Some(sk) = &keypair.secret_key {
             sk.scheme()
-                .sign(message, &sk)
+                .sign(message, sk)
                 .map(MlDsaSignature)
                 .map_err(|e| PyValueError::new_err(e.to_string()))
         } else {

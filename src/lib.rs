@@ -1,3 +1,8 @@
+// Allow inherent to_string methods for Python API compatibility
+#![allow(clippy::inherent_to_string)]
+// Allow useless_conversion warnings from PyO3 macro-generated code
+#![allow(clippy::useless_conversion)]
+
 use pyo3::prelude::*;
 
 #[cfg(any(feature = "eth-falcon", feature = "fn-dsa", feature = "hhd"))]
