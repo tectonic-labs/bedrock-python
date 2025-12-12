@@ -24,7 +24,7 @@ defaults:
     shell: bash
 
 jobs:
-  nodejs:
+  python3:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
