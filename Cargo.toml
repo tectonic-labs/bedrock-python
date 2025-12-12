@@ -1,0 +1,36 @@
+[package]
+edition = "2021"
+name = "bedrock-python"
+version = "0.1.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[features]
+default = [
+    "hhd",
+    "kgen",
+    "sign",
+    "vrfy",
+    "fn-dsa",
+    "eth-falcon",
+    "ml-dsa",
+]
+
+hhd = ["bedrock/hhd"]
+kgen = ["bedrock/kgen"]
+sign = ["bedrock/sign"]
+vrfy = ["bedrock/vrfy"]
+fn-dsa = ["bedrock/falcon"]
+eth-falcon = ["bedrock/eth_falcon", "fn-dsa"]
+ml-dsa = ["bedrock/ml-dsa"]
+
+[dependencies]
+pyo3 = { version = "0.22", features = ["extension-module", "macros"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dependencies.bedrock]
+git = "ssh://git@github.com/tectonic-labs/bedrock"
+tag = "v0.1.0-rc3"
+default-features = false

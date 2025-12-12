@@ -1,0 +1,61 @@
+name: rust
+
+on:
+ push:
+  branches:
+    - main
+  paths-ignore:
+    - '**/*.md'
+ pull_request:
+  branches:
+    - main
+  paths-ignore:
+    - '**/*.md'
+
+env:
+  CARGO_INCREMENTAL: 0
+  CARGO_TERM_COLOR: always
+  RUST_LOG_STYLE: always
+  RUSTFLAGS: "-Dwarnings"
+  RUSTDOCFLAGS: "-Dwarnings"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Setup SSH Key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add GitHub to know hosts
+        run: ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+          components: rustfmt clippy
+
+      - name: Configure Cargo to use git CLI
+        run: |
+          mkdir -p ~/.cargo
+          echo '[net]' > ~/.cargo/config.toml
+          echo 'git-fetch-with-cli = true' >> ~/.cargo/config.toml
+
+      - name: Set git to fetch all refs (not shallow)
+        run: |
+          git config --global fetch.prune true
+          git config --global fetch.pruneTags true
+
+      - name: RustFmt
+        run: cargo fmt -- --check
+
+      - name: Clippy
+        run: cargo clippy --all-features -- -D warnings
