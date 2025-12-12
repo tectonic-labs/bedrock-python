@@ -316,7 +316,7 @@ maturin build --release --interpreter python3.9 python3.10 python3.11 python3.12
 maturin build --release --target universal2-apple-darwin
 ```
 
-### Building manylinux Wheels (for Linux distribution)
+### Building many Linux Wheels (for Linux distribution)
 
 For distributing on Linux, you should build `manylinux` compatible wheels using Docker:
 
