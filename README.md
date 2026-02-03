@@ -38,6 +38,9 @@ pip install maturin
 # Build and install in development mode
 maturin develop
 
+# After installation, the bedrock-kats CLI tool will be available
+bedrock-kats --help
+
 # Or build a wheel for distribution
 maturin build --release
 ```
@@ -397,6 +400,70 @@ maturin sdist
 # The sdist will be in target/wheels/
 # Users installing from sdist will need Rust toolchain
 ```
+
+## KATS Vector Testing
+
+The package includes a command-line tool for testing ML-DSA key generation against KATs (Known Answer Tests) vectors from NIST ACVP. This allows you to verify that the implementation correctly generates keys from seeds according to the standard test vectors.
+
+**Note**: This tool uses test vectors from NIST ACVP Server **RELEASE/v1.1.0.40**.
+
+### Obtaining KATS Vectors
+
+KATs vectors are available from:
+
+**NIST ACVP (Official)**: Test vectors in JSON format from the [NIST ACVP Server](https://github.com/usnistgov/ACVP-Server/tree/master/gen-val/json-files/ML-DSA-keyGen-FIPS204) (RELEASE/v1.1.0.40)
+   - The ML-DSA key generation vectors are in: `gen-val/json-files/ML-DSA-keyGen-FIPS204/`.
+   - Each variant (44, 65, 87) is included in `prompt.json` and `expectedResults.json` files.
+
+#### Test Vectors Location
+
+The NIST ACVP test vectors are already included in the repository in the `test_vectors/` folder:
+
+- Test vectors are located at: `test_vectors/ML-DSA-keyGen-FIPS204/`
+- The vectors include `prompt.json` and `expectedResults.json` files
+- These vectors are from **RELEASE/v1.1.0.40** of the NIST ACVP Server
+
+You can use them directly without any additional setup:
+
+```bash
+bedrock-kats test_vectors/ML-DSA-keyGen-FIPS204/prompt.json test_vectors/ML-DSA-keyGen-FIPS204/expectedResults.json
+```
+
+### Using the KATS Testing Tool
+
+The `bedrock-kats` command-line tool is installed automatically when you install the `bedrock-python` package. After installation (via `maturin develop` or `pip install`), the `bedrock-kats` command will be available in your PATH.
+
+The tool tests NIST ACVP JSON format vectors:
+
+```bash
+# Test NIST JSON format (requires both files)
+# For NIST ACVP vectors, use the prompt.json and expectedResults.json files
+bedrock-kats test_vectors/ML-DSA-keyGen-FIPS204/prompt.json test_vectors/ML-DSA-keyGen-FIPS204/expectedResults.json
+
+# Test specific scheme only
+bedrock-kats --scheme 44 prompt.json expectedResults.json
+
+# Verbose output showing each test
+bedrock-kats --verbose prompt.json expectedResults.json
+
+# Quiet mode (summary only)
+bedrock-kats --quiet prompt.json expectedResults.json
+```
+
+### KATS Tool Options
+
+- `--scheme {44,65,87}` - Filter by ML-DSA scheme variant
+- `--verbose, -v` - Show detailed test results
+- `--quiet, -q` - Only show summary statistics
+
+The tool will:
+- Parse test vectors from the specified file(s) or directory
+- Generate keypairs from the provided seeds
+- Compare generated keys with expected values
+- Report pass/fail status for each test
+- Provide a summary with total tests, passed, and failed counts
+
+Exit code 0 indicates all tests passed, non-zero indicates failures.
 
 ## Feature Flags
 
