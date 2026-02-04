@@ -1,2 +1,25 @@
-/target
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Rust
+target/
+Cargo.lock
+
+# IDE
+.vscode/
 .idea/
+*.swp
+*.swo
+
+# Environment
+.venv/
+venv/
+env/
