@@ -52,6 +52,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           command: build
+          before-script-linux: yum install -y clang-devel cmake3 && ln -sf /usr/bin/cmake3 /usr/bin/cmake || true
 
       - name: Build and publish
         if: ${{ github.event.inputs.dry_run != 'true' }}
@@ -59,5 +60,6 @@ jobs:
         with:
           command: publish
           args: --skip-existing
+          before-script-linux: yum install -y clang-devel cmake3 && ln -sf /usr/bin/cmake3 /usr/bin/cmake || true
         env:
           MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
