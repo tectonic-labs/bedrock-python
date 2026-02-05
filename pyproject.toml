@@ -6,12 +6,52 @@ build-backend = "maturin"
 name = "bedrock-python"
 version = "0.1.0"
 description = "Python bindings for the Bedrock cryptographic library"
+readme = "README.md"
+license = {file = "LICENSE"}
 requires-python = ">=3.8"
+authors = [
+    {name = "Tectonic Labs Developers"}
+]
+maintainers = [
+    {name = "Tectonic Labs Developers"}
+]
+keywords = [
+    "cryptography",
+    "post-quantum",
+    "pqc",
+    "falcon",
+    "fn-dsa",
+    "ml-dsa",
+    "dilithium",
+    "digital-signatures",
+    "hd-wallet",
+    "bip39",
+]
 classifiers = [
-    "Programming Language :: Rust",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
+    "Programming Language :: Rust",
+    "Topic :: Security :: Cryptography",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
 ]
+
+[project.urls]
+Homepage = "https://github.com/tectonic-labs/bedrock-python"
+Repository = "https://github.com/tectonic-labs/bedrock-python"
+Documentation = "https://github.com/tectonic-labs/bedrock-python#readme"
+Issues = "https://github.com/tectonic-labs/bedrock-python/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0", "maturin>=1.0"]
