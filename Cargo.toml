@@ -31,6 +31,6 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
 [dependencies.bedrock]
-git = "ssh://git@github.com/tectonic-labs/bedrock"
-tag = "v0.1.0-rc3"
+package = "tectonic-bedrock"
+version = "0.2.0"
 default-features = false
