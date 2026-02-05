@@ -52,6 +52,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           command: build
+          manylinux: manylinux_2_28
           before-script-linux: yum install -y clang-devel cmake3 && ln -sf /usr/bin/cmake3 /usr/bin/cmake || true
 
       - name: Build and publish
@@ -60,6 +61,7 @@ jobs:
         with:
           command: publish
           args: --skip-existing
+          manylinux: manylinux_2_28
           before-script-linux: yum install -y clang-devel cmake3 && ln -sf /usr/bin/cmake3 /usr/bin/cmake || true
         env:
           MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
