@@ -47,12 +47,17 @@ jobs:
           sed -i "s/^version = .*/version = \"$VERSION\"/" pyproject.toml
           grep "^version =" pyproject.toml
 
+      - name: Dry run (build only)
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        uses: PyO3/maturin-action@v1
+        with:
+          command: build
+
       - name: Build and publish
+        if: ${{ github.event.inputs.dry_run != 'true' }}
         uses: PyO3/maturin-action@v1
         with:
           command: publish
-          args: >-
-            --skip-existing
-            ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
+          args: --skip-existing
         env:
           MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
